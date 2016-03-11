@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TabHost;
 
+import com.habitissimo.vespapp.questions.CuestionarioActivity;
+
 public class MainActivity extends AppCompatActivity {
 
     private final int TAKE_CAPTURE_REQUEST = 0;
@@ -28,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         initTabs();
         initCamBtn();
         initSelFotosBtn();
+        CuestionarioActivity.Lanch_Activity(this, 0);
     }
 
     private void initSelFotosBtn() {

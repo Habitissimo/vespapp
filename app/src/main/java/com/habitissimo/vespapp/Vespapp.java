@@ -32,6 +32,7 @@ public class Vespapp extends Application {
         super.onCreate();
         gson = new Gson();
         database = new Database(this, gson);
+
         httpClient = new OkHttpClient.Builder()
                 .build();
         Picasso.setSingletonInstance(new Picasso.Builder(this)
