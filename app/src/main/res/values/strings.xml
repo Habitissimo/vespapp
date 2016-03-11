@@ -12,6 +12,10 @@
     <string name="aceptar">Aceptar</string>
     <string name="cancelar">Cancelar</string>
     <string name="añadir_foto">Añade otra foto</string>
+    <string name="status_pending">Pendiente</string>
+    <string name="status_processed">Tramitado</string>
+    <string name="status_processing">En proceso</string>
+    <string name="status_unsent">No enviada</string>
 
 
 </resources>
