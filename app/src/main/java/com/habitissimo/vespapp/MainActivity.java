@@ -1,11 +1,14 @@
 package com.habitissimo.vespapp;
 
 import android.content.Intent;
-import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TabHost;
@@ -14,13 +17,19 @@ import com.habitissimo.vespapp.database.Database;
 import com.habitissimo.vespapp.fotos.ConfirmCapActivity;
 import com.habitissimo.vespapp.fotos.ListaFotos;
 
-import java.util.ArrayList;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static boolean existeLista = false;
+    public static final String TAG = "MainActivity";
     private final int TAKE_CAPTURE_REQUEST = 0;
     private final int PICK_IMAGE_REQUEST = 1;
+    private ListaFotos lista;
+    private File photoFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +57,32 @@ public class MainActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, TAKE_CAPTURE_REQUEST);
+                try {
+                    takePhoto();
+                } catch (IOException e) {
+                    Log.e(TAG, "Could not take photo: " + e);
+                }
             }
         });
+    }
+
+    private void takePhoto() throws IOException {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        photoFile = createImageFile();
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+        startActivityForResult(intent, TAKE_CAPTURE_REQUEST);
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        return File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
     }
 
     /**
@@ -79,36 +110,64 @@ public class MainActivity extends AppCompatActivity {
         tabs.setCurrentTab(1);
     }
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // TODO Auto-generated method stub
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && data != null) {
-            // Obtener path
-            String picturePath;
+    private void resize(File photo, int width, int height) {
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(photo.getAbsolutePath(), bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
 
-            Uri selectedImage = data.getData();
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-            cursor.moveToFirst();
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            picturePath = cursor.getString(columnIndex);
-            cursor.close();
+        int scaleFactor = Math.min(photoW / width, photoH / height);
 
-            // Actualizar database
-            ListaFotos lista;
-            if (!existeLista) {
-                lista = new ListaFotos(new ArrayList<String>());
-                existeLista = true;
-            } else {
-                lista = Database.get(this).load(Constants.FOTOS_LIST, ListaFotos.class);
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(photo.getAbsolutePath(), bmOptions);
+
+        saveBitmapToFile(bitmap, photo);
+    }
+
+    private void saveBitmapToFile(Bitmap bitmap, File photo) {
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(photo.getAbsolutePath());
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+            // PNG is a lossless format, the compression factor (100) is ignored
+        } catch (Exception e) {
+            throw new RuntimeException("Could not save bitmap into file(" + photo.getAbsolutePath() + "): " + e);
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                throw new RuntimeException("Could not save bitmap into file(" + photo.getAbsolutePath() + "): " + e);
             }
-            lista.getLista().add(picturePath);
-            Database.get(this).save(Constants.FOTOS_LIST, lista);
+        }
+    }
 
-            // Lanzar activity de confirmacion
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            String picturePath = photoFile.getAbsolutePath();
+
+            resize(photoFile, 640, 480);
+            savePictureToDatabase(picturePath);
+
             Intent i = new Intent(this, ConfirmCapActivity.class);
             startActivity(i);
         }
+    }
 
+    private void savePictureToDatabase(String picturePath) {
+        if (lista == null) {
+            lista = new ListaFotos();
+        } else {
+            lista = Database.get(this).load(Constants.FOTOS_LIST, ListaFotos.class);
+        }
+        lista.getLista().add(picturePath);
+        Database.get(this).save(Constants.FOTOS_LIST, lista);
     }
 }
