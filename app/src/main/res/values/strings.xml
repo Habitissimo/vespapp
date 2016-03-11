@@ -8,6 +8,8 @@
     <string name="status_processed">Tramitado</string>
     <string name="status_processing">En proceso</string>
     <string name="status_unsent">No enviada</string>
+    <string name="listo">¡Listo!</string>
+    <string name="s_lo_quedan_unas_preguntas">Sólo quedan unas preguntas</string>
 
 
 </resources>

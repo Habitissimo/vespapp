@@ -8,6 +8,8 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.habitissimo.vespapp.api.VespappApi;
 import com.habitissimo.vespapp.database.Database;
+import com.joanzapata.iconify.Iconify;
+import com.joanzapata.iconify.fonts.FontAwesomeModule;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Picasso.Listener;
 
@@ -30,6 +32,9 @@ public class Vespapp extends Application {
 
     @Override public void onCreate() {
         super.onCreate();
+
+        Iconify.with(new FontAwesomeModule());
+
         gson = new Gson();
         database = new Database(this, gson);
         httpClient = new OkHttpClient.Builder()

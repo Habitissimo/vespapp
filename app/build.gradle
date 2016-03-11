@@ -31,4 +31,5 @@ dependencies {
     compile 'org.mockito:mockito-core:2.0.43-beta'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.squareup.okhttp:okhttp:2.7.5'
+    compile 'com.joanzapata.iconify:android-iconify-fontawesome:2.2.1'
 }
