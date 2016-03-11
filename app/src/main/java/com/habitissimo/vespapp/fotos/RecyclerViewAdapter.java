@@ -1,6 +1,7 @@
 package com.habitissimo.vespapp.fotos;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -46,11 +47,29 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
 
     @Override
     public void onBindViewHolder(RecyclerViewHolders holder, int position) {
-        holder.foto.setImageBitmap(BitmapFactory.decodeFile(itemList.get(position)));
+        Bitmap img = BitmapFactory.decodeFile(itemList.get(position));
+        img = getResizedBitmap(img, 640);
+        holder.foto.setImageBitmap(img);
     }
 
     @Override
     public int getItemCount() {
         return this.itemList.size();
+    }
+
+    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float) width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+
+        return Bitmap.createScaledBitmap(image, width, height, true);
     }
 }

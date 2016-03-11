@@ -19,6 +19,7 @@
 
     <Button
         android:id="@+id/btn_cam"
+        style="@style/ButtonOrangeRipple"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -29,10 +30,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
         android:text="@string/txt_selFotos" />
 
     <Button
         android:id="@+id/btn_selFotos"
+        style="@style/ButtonOrangeRipple"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
