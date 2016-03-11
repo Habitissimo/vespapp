@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Vespapp</string>
+    <string name="btn_selFotos">Seleccionar fotos</string>
+    <string name="txt_selFotos">Si ya tienes fotos, ¡añadelas!</string>
 </resources>
