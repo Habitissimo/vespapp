@@ -2,23 +2,25 @@ package com.habitissimo.vespapp;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TabHost;
+
+import com.habitissimo.vespapp.database.Database;
+import com.habitissimo.vespapp.fotos.ConfirmCapActivity;
+import com.habitissimo.vespapp.fotos.ListaFotos;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static boolean existeLista = false;
     private final int TAKE_CAPTURE_REQUEST = 0;
     private final int PICK_IMAGE_REQUEST = 1;
-
-    private ImageView img;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +52,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, TAKE_CAPTURE_REQUEST);
             }
         });
-
-        img = (ImageView) findViewById(R.id.img);
     }
 
     /**
@@ -83,26 +83,31 @@ public class MainActivity extends AppCompatActivity {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && data != null) {
-            Bitmap bp = null;
+            // Obtener path
+            String picturePath;
 
-            switch (requestCode) {
-                case TAKE_CAPTURE_REQUEST:
-                    bp = (Bitmap) data.getExtras().get("data");
-                    img.setImageBitmap(bp);
-                    break;
-                case PICK_IMAGE_REQUEST:
-                    Uri selectedImage = data.getData();
-                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                    Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                    cursor.moveToFirst();
-                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    String picturePath = cursor.getString(columnIndex);
-                    cursor.close();
-                    bp = BitmapFactory.decodeFile(picturePath);
-                    break;
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+            cursor.moveToFirst();
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            picturePath = cursor.getString(columnIndex);
+            cursor.close();
+
+            // Actualizar database
+            ListaFotos lista;
+            if (!existeLista) {
+                lista = new ListaFotos(new ArrayList<String>());
+                existeLista = true;
+            } else {
+                lista = Database.get(this).load(Constants.FOTOS_LIST, ListaFotos.class);
             }
+            lista.getLista().add(picturePath);
+            Database.get(this).save(Constants.FOTOS_LIST, lista);
 
-            img.setImageBitmap(bp);
+            // Lanzar activity de confirmacion
+            Intent i = new Intent(this, ConfirmCapActivity.class);
+            startActivity(i);
         }
 
     }
