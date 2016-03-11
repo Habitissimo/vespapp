@@ -2,6 +2,7 @@ package com.habitissimo.vespapp.questions;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,25 +24,23 @@ public class Sighting {
     public int status = STATUS_UNSENT;
     public String free_text;
     public int type;
-    public List<Answer> answer;
+    public List<Question> available_questions = new ArrayList<>();
+    public List<String> answers = new ArrayList<>();
     @SerializedName("public")
     public boolean _public;
     public List<Picture> pictures;
 
+    public String source = "app";
+
     public Sighting() {
     }
 
-    public Sighting(String id, Location location, float lat, float lng, int status, String free_text, int type, List<Answer> answer,
-                    boolean _public, List<Picture> pictures) {
-        this.id = id;
-        this.location = location;
-        this.lat = lat;
-        this.lng = lng;
-        this.status = status;
-        this.free_text = free_text;
-        this.type = type;
-        this.answer = answer;
-        this._public = _public;
-        this.pictures = pictures;
+
+    public void addAnswer(Answer answer) {
+        this.answers.add(answer.id);
+    }
+
+    public void deleteAnswer(Answer answer) {
+        this.answers.remove(answer.id);
     }
 }

@@ -3,7 +3,6 @@ package com.habitissimo.vespapp.api;
 import com.habitissimo.vespapp.questions.ExpertComment;
 import com.habitissimo.vespapp.questions.Location;
 import com.habitissimo.vespapp.questions.Picture;
-import com.habitissimo.vespapp.questions.Question;
 import com.habitissimo.vespapp.questions.Sighting;
 
 import java.io.File;
@@ -20,28 +19,37 @@ import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 public interface VespappApi {
-    @GET("/sightings") void getSightings(Callback<List<Sighting>> callback);
+    @GET("/sightings")
+    void getSightings(Callback<List<Sighting>> callback);
 
-    @GET("/sightings" + "/{sightingId}") void getSightingById(@Path("sightingId") String sightingId, Callback<Sighting> callback);
+    @GET("/sightings" + "/{sightingId}")
+    void getSightingById(@Path("sightingId") String sightingId, Callback<Sighting> callback);
 
-    @POST("/sightings") void createSighting(@Body Sighting sighting, Callback<Sighting> callback);
+    @PATCH("/sightings" + "/{sightingId}")
+    void updateSighting(@Path("sightingId") String sightingId, @Body Sighting sighting, Callback<Sighting> callback);
+
+    @POST("/sightings")
+    void createSighting(@Body Sighting sighting, Callback<Sighting> callback);
 
     /**
      * @see VespappApiHelper#buildPhotoApiParameter(File)
      */
-    @Multipart @POST("/sightings/{sightingId}/photos")
+    @Multipart
+    @POST("/sightings/{sightingId}/photos")
     void addPhoto(@Path("sightingId") String sightingId, @Part("file\"; filename=\"photo.png\" ") RequestBody photo);
 
-    @GET("/sightings/{sightingId}/photos") void getPhotos(@Path("sightingId") String sightingId, Callback<List<Picture>> callback);
+    @GET("/sightings/{sightingId}/photos")
+    void getPhotos(@Path("sightingId") String sightingId, Callback<List<Picture>> callback);
 
-    @GET("/sightings/{sightingId}/questions") void getQuestions(@Path("sightingId") String sightingId, Callback<List<Question>> callback);
-
-    @GET("/sightings/{sightingId}/questions/{questionId}")
-    void getQuestionById(@Path("sightingId") String sightingId, @Path("questionId") String questionId, Callback<Question> callback);
-
-    @PATCH("/sightings/{sightingId}/questions/{questionId}")
-    void updateQuestion(@Path("sightingId") String sightingId, @Path("questionId") String questionId, @Body /* TODO */ Void question,
-                        Callback</* TODO */Void> callback);
+//    @GET("/sightings/{sightingId}/questions")
+//    void getQuestions(@Path("sightingId") String sightingId, Callback<List<Answer>> callback);
+//
+//    @GET("/sightings/{sightingId}/questions/{questionId}")
+//    void getQuestionById(@Path("sightingId") String sightingId, @Path("questionId") String questionId, Callback<Answer> callback);
+//
+//    @PATCH("/sightings/{sightingId}/questions/{questionId}")
+//    void updateQuestion(@Path("sightingId") String sightingId, @Path("questionId") String questionId, @Body QuestionRequest answersid,
+//                        Callback</* TODO */Void> callback);
 
     @GET("/sightings/{sightingId}/expert_comments")
     void getExpertComments(@Path("sightingId") String sightingId, Callback<ExpertComment> callback);
@@ -52,5 +60,6 @@ public interface VespappApi {
     @GET("/sightings/{sightingId}/expert_comments/{commentId}")
     void getExpertCommentById(@Path("sightingId") String sightingId, @Path("commentId") String commentId, Callback<ExpertComment> callback);
 
-    @GET("/locations") void getLocations(Callback<List<Location>> callback);
+    @GET("/locations")
+    void getLocations(Callback<List<Location>> callback);
 }
