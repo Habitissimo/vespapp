@@ -8,7 +8,7 @@
         android:id="@+id/toolbar_confirm_cap"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white">
+        android:background="@color/colorPrimaryDark">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -26,6 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/confirm_cap_titulo"
+                android:textColor="@color/colorTitulo"
                 android:textSize="@dimen/toolbar_title_size" />
 
         </FrameLayout>
@@ -36,7 +37,8 @@
         android:id="@+id/recycle_fotos"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:background="@color/colorPrimary">
 
     </android.support.v7.widget.RecyclerView>
 
@@ -49,6 +51,7 @@
 
         <Button
             android:id="@+id/btn_añadir_foto"
+            style="@style/ButtonOrangeRipple"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -69,6 +72,7 @@
 
             <Button
                 android:id="@+id/btn_nido"
+                style="@style/ButtonOrangeRipple"
                 android:layout_width="wrap_content"
                 android:layout_height="100dp"
                 android:layout_marginRight="20dp"
@@ -77,6 +81,7 @@
 
             <Button
                 android:id="@+id/btn_avispa"
+                style="@style/ButtonOrangeRipple"
                 android:layout_width="wrap_content"
                 android:layout_height="100dp"
                 android:layout_marginLeft="20dp"
