@@ -1,3 +1,24 @@
 <resources>
     <string name="app_name">Vespapp</string>
+
+    <string-array name="preguntas">
+
+        <item>P1</item>
+        <item>P2</item>
+
+    </string-array>
+
+    <integer-array name="id_respuesta">
+        <item>0</item>
+        <item>0</item>
+        <item>1</item>
+
+    </integer-array>
+
+    <string-array name="respuesta">
+        <item>R1</item>
+        <item>R2</item>
+        <item>R3</item>
+    </string-array>
+
 </resources>
