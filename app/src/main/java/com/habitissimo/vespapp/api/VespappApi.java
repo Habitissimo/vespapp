@@ -1,5 +1,11 @@
 package com.habitissimo.vespapp.api;
 
+import com.habitissimo.vespapp.questions.ExpertComment;
+import com.habitissimo.vespapp.questions.Location;
+import com.habitissimo.vespapp.questions.Picture;
+import com.habitissimo.vespapp.questions.Question;
+import com.habitissimo.vespapp.questions.Sighting;
+
 import java.io.File;
 import java.util.List;
 
@@ -14,11 +20,11 @@ import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 public interface VespappApi {
-    @GET("/sightings") void getSightings(Callback</* TODO */Void> callback);
+    @GET("/sightings") void getSightings(Callback<List<Sighting>> callback);
 
-    @GET("/sightings" + "/{sightingId}") void getSightingById(@Path("sightingId") String sightingId, Callback</* TODO */Void> callback);
+    @GET("/sightings" + "/{sightingId}") void getSightingById(@Path("sightingId") String sightingId, Callback<Sighting> callback);
 
-    @POST("/sightings") void createSighting(@Body /* TODO */ Void sighting, Callback</* TODO */Void> callback);
+    @POST("/sightings") void createSighting(@Body Sighting sighting, Callback<Sighting> callback);
 
     /**
      * @see VespappApiHelper#buildPhotoApiParameter(File)
@@ -26,26 +32,25 @@ public interface VespappApi {
     @Multipart @POST("/sightings/{sightingId}/photos")
     void addPhoto(@Path("sightingId") String sightingId, @Part("file\"; filename=\"photo.png\" ") RequestBody photo);
 
-    @GET("/sightings/{sightingId}/photos") void getPhotos(@Path("sightingId") String sightingId, Callback</* TODO */Void> callback);
+    @GET("/sightings/{sightingId}/photos") void getPhotos(@Path("sightingId") String sightingId, Callback<List<Picture>> callback);
 
-    @GET("/sightings/{sightingId}/questions")
-    void getQuestions(@Path("sightingId") String sightingId, Callback</* TODO*/List<Void>> callback);
+    @GET("/sightings/{sightingId}/questions") void getQuestions(@Path("sightingId") String sightingId, Callback<List<Question>> callback);
 
     @GET("/sightings/{sightingId}/questions/{questionId}")
-    void getQuestionById(@Path("sightingId") String sightingId, @Path("questionId") String questionId, Callback</* TODO */Void> callback);
+    void getQuestionById(@Path("sightingId") String sightingId, @Path("questionId") String questionId, Callback<Question> callback);
 
     @PATCH("/sightings/{sightingId}/questions/{questionId}")
     void updateQuestion(@Path("sightingId") String sightingId, @Path("questionId") String questionId, @Body /* TODO */ Void question,
                         Callback</* TODO */Void> callback);
 
     @GET("/sightings/{sightingId}/expert_comments")
-    void getExpertComments(@Path("sightingId") String sightingId, Callback</* TODO */Void> callback);
+    void getExpertComments(@Path("sightingId") String sightingId, Callback<ExpertComment> callback);
 
     @POST("/sightings/{sightingId}/expert_comments")
-    void createExpertComment(@Path("sightingId") String sightingId, @Body /* TODO */ Void comment, Callback</* TODO */Void> callback);
+    void createExpertComment(@Path("sightingId") String sightingId, @Body /* TODO */ Void comment, Callback<ExpertComment> callback);
 
     @GET("/sightings/{sightingId}/expert_comments/{commentId}")
-    void getExpertCommentById(@Path("sightingId") String sightingId, @Path("commentId") String commentId, Callback</* TODO */Void> callback);
+    void getExpertCommentById(@Path("sightingId") String sightingId, @Path("commentId") String commentId, Callback<ExpertComment> callback);
 
-    @GET("/locations") void getLocations(Callback</* TODO */Void> callback);
+    @GET("/locations") void getLocations(Callback<List<Location>> callback);
 }
