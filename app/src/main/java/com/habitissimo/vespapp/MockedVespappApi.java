@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import com.habitissimo.vespapp.questions.ExpertComment;
 import com.habitissimo.vespapp.questions.Location;
 import com.habitissimo.vespapp.questions.Picture;
-import com.habitissimo.vespapp.questions.Question;
 import com.habitissimo.vespapp.questions.Sighting;
 
 import java.util.ArrayList;
@@ -56,6 +55,11 @@ public class MockedVespappApi implements com.habitissimo.vespapp.api.VespappApi 
 
     }
 
+    @Override
+    public void updateSighting(@Path("sightingId") String sightingId, @Body Sighting sighting, Callback<Sighting> callback) {
+
+    }
+
     @Override public void createSighting(@Body Sighting sighting, Callback<Sighting> callback) {
 
     }
@@ -65,20 +69,6 @@ public class MockedVespappApi implements com.habitissimo.vespapp.api.VespappApi 
     }
 
     @Override public void getPhotos(@Path("sightingId") String sightingId, Callback<List<Picture>> callback) {
-
-    }
-
-    @Override public void getQuestions(@Path("sightingId") String sightingId, Callback<List<Question>> callback) {
-
-    }
-
-    @Override
-    public void getQuestionById(@Path("sightingId") String sightingId, @Path("questionId") String questionId, Callback<Question> callback) {
-
-    }
-
-    @Override
-    public void updateQuestion(@Path("sightingId") String sightingId, @Path("questionId") String questionId, @Body Void question, Callback<Void> callback) {
 
     }
 
