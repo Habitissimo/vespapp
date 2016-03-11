@@ -1,9 +1,9 @@
-package com.habitissimo.vespapp;
+package com.habitissimo.vespapp.example;
 
 import com.habitissimo.vespapp.base.Controller;
 import com.habitissimo.vespapp.database.Database;
 
-public class MainController extends Controller<MainView, String> {
+public class ExampleController extends Controller<ExampleView, String> {
     private static final String KEY_PRESS_COUNT = "pressed_count";
 
     private String argument;
