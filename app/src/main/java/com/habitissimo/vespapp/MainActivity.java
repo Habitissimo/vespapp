@@ -1,6 +1,7 @@
 package com.habitissimo.vespapp;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -26,8 +27,8 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "MainActivity";
-    private final int TAKE_CAPTURE_REQUEST = 0;
-    private final int PICK_IMAGE_REQUEST = 1;
+    private static final int TAKE_CAPTURE_REQUEST = 0;
+    private static final int PICK_IMAGE_REQUEST = 1;
     private ListaFotos lista;
     private File photoFile;
 
@@ -35,6 +36,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        try {
+            lista = Database.get(this).load(Constants.FOTOS_LIST, ListaFotos.class);
+        } catch (Exception e) {
+            lista = new ListaFotos();
+        }
 
         initTabs();
         initCamBtn();
@@ -69,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
     private void takePhoto() throws IOException {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         photoFile = createImageFile();
+        Database.get(this).save(Constants.KEY_CAPTURE, photoFile.getAbsolutePath());
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
         startActivityForResult(intent, TAKE_CAPTURE_REQUEST);
     }
@@ -151,9 +158,25 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
-            String picturePath = photoFile.getAbsolutePath();
+            String picturePath = null;
 
-            resize(photoFile, 640, 480);
+            switch (requestCode) {
+                case TAKE_CAPTURE_REQUEST:
+                    picturePath = Database.get(this).load(Constants.KEY_CAPTURE);
+                    photoFile = new File(picturePath);
+                    resize(photoFile, 640, 480);
+                    break;
+                case PICK_IMAGE_REQUEST:
+                    Uri selectedImage = data.getData();
+                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                    Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+                    cursor.moveToFirst();
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    picturePath = cursor.getString(columnIndex);
+                    cursor.close();
+                    break;
+            }
+
             savePictureToDatabase(picturePath);
 
             Intent i = new Intent(this, ConfirmCaptureActivity.class);

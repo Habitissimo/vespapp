@@ -5,13 +5,15 @@ package com.habitissimo.vespapp.questions;
  */
 public class Picture {
     public String file;
-    public Sighting sighting;
+    public String id;
+    public String sighting;
 
     public Picture() {
     }
 
-    public Picture(String file, Sighting sighting) {
+    public Picture(String file, String id, String sighting) {
         this.file = file;
+        this.id = id;
         this.sighting = sighting;
     }
 }
