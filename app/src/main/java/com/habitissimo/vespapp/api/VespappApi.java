@@ -37,10 +37,10 @@ public interface VespappApi {
      * @see VespappApiHelper#buildPhotoApiParameter(File)
      */
     @Multipart
-    @POST(SIGHTINGS + "{sightingId}/photos")
+    @POST(SIGHTINGS + "{sightingId}/photos/")
     Call<Void> addPhoto(@Path("sightingId") String sightingId, @Part("file\"; filename=\"photo.png\" ") RequestBody photo);
 
-    @GET("/sightings/{sightingId}/photos")
+    @GET("/sightings/{sightingId}/photos/")
     void getPhotos(@Path("sightingId") String sightingId, Callback<List<Picture>> callback);
 
 //    @GET("/sightings/{sightingId}/questions")
@@ -53,15 +53,15 @@ public interface VespappApi {
 //    void updateQuestion(@Path("sightingId") String sightingId, @Path("questionId") String questionId, @Body QuestionRequest answersid,
 //                        Callback</* TODO */Void> callback);
 
-    @GET("/sightings/{sightingId}/expert_comments")
+    @GET("/sightings/{sightingId}/expert_comments/")
     void getExpertComments(@Path("sightingId") String sightingId, Callback<ExpertComment> callback);
 
-    @POST("/sightings/{sightingId}/expert_comments")
+    @POST("/sightings/{sightingId}/expert_comments/")
     void createExpertComment(@Path("sightingId") String sightingId, @Body /* TODO */ Void comment, Callback<ExpertComment> callback);
 
-    @GET("/sightings/{sightingId}/expert_comments/{commentId}")
+    @GET("/sightings/{sightingId}/expert_comments/{commentId}/")
     void getExpertCommentById(@Path("sightingId") String sightingId, @Path("commentId") String commentId, Callback<ExpertComment> callback);
 
-    @GET("/locations")
+    @GET("/locations/")
     void getLocations(Callback<List<Location>> callback);
 }

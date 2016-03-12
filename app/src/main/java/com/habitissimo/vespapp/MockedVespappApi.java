@@ -100,8 +100,8 @@ public class MockedVespappApi implements com.habitissimo.vespapp.api.VespappApi 
 
     private List<Picture> createRandomPictures(Sighting sighting) {
         return Arrays.asList(
-                new Picture("http://lorempixel.com/" + random(375, 425) + "/" + random(375, 425), sighting),
-                new Picture("http://lorempixel.com/400/400/", sighting)
+                new Picture("http://lorempixel.com/" + random(375, 425) + "/" + random(375, 425), "1", sighting.id),
+                new Picture("http://lorempixel.com/400/400/", "2", sighting.id)
         );
     }
 

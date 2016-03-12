@@ -3,6 +3,8 @@ package com.habitissimo.vespapp;
 import android.app.Application;
 import android.content.Context;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.StrictMode;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -20,7 +22,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Vespapp extends Application {
     private static final boolean FORCE_MOCK = false;
-
     private Database database;
     private VespappApi api;
     private Gson gson;
@@ -30,8 +31,26 @@ public class Vespapp extends Application {
         return (Vespapp) context.getApplicationContext();
     }
 
+    private void setStrictModeConfigurationWorkaround() {
+        //Workaround for modifying StrictMode parameters.
+        //See http://code.google.com/p/android/issues/detail?id=35298
+        new Handler().postAtFrontOfQueue(new Runnable() {
+            @Override public void run() {
+                setStrictModeConfiguration();
+            }
+        });
+    }
+
+    private void setStrictModeConfiguration() {
+        StrictMode.ThreadPolicy policy;
+        policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+    }
+
     @Override public void onCreate() {
+        setStrictModeConfiguration();
         super.onCreate();
+        setStrictModeConfigurationWorkaround();
 
         Iconify.with(new FontAwesomeModule());
 

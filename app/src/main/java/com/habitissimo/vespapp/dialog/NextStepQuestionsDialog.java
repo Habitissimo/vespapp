@@ -2,8 +2,12 @@ package com.habitissimo.vespapp.dialog;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.view.Window;
 
 import com.habitissimo.vespapp.R;
 
@@ -29,8 +33,15 @@ public class NextStepQuestionsDialog extends AlertDialog {
         init();
     }
 
-    public static void show(Context context, Listener listener) {
-        new NextStepQuestionsDialog(context).setListener(listener).show();
+    public static AlertDialog show(Context context, final Listener listener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setView(R.layout.dialog_next_step_questions);
+        builder.setOnDismissListener(new OnDismissListener() {
+            @Override public void onDismiss(DialogInterface dialog) {
+                listener.onDialogDismissed();
+            }
+        });
+        return builder.show();
     }
 
     private NextStepQuestionsDialog setListener(Listener listener) {
@@ -39,6 +50,9 @@ public class NextStepQuestionsDialog extends AlertDialog {
     }
 
     private void init() {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
+        getWindow().setBackgroundDrawable(transparentDrawable);
         setContentView(R.layout.dialog_next_step_questions);
         ButterKnife.bind(this);
 

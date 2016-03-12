@@ -24,23 +24,29 @@ public class Sighting {
     public int status = STATUS_UNSENT;
     public String free_text;
     public int type;
-    public List<Question> available_questions = new ArrayList<>();
-    public List<String> answers = new ArrayList<>();
+    public List<Question> available_questions = null;
+    public List<String> answers = null;
     @SerializedName("public")
     public boolean _public;
-    public List<Picture> pictures = new ArrayList<>();
+    public List<Picture> pictures = null;
 
     public String source = "app";
 
     public Sighting() {
     }
 
-
     public void addAnswer(Answer answer) {
+        if (answers == null) {
+            answers = new ArrayList<>();
+        }
         this.answers.add(answer.id);
     }
 
     public void deleteAnswer(Answer answer) {
+        if (answers == null) {
+            answers = new ArrayList<>();
+        }
+
         this.answers.remove(answer.id);
     }
 }

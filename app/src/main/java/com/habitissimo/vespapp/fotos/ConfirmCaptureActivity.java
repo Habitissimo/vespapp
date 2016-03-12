@@ -1,6 +1,7 @@
 package com.habitissimo.vespapp.fotos;
 
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.habitissimo.vespapp.Constants;
 import com.habitissimo.vespapp.R;
@@ -15,6 +17,7 @@ import com.habitissimo.vespapp.Vespapp;
 import com.habitissimo.vespapp.database.Database;
 import com.habitissimo.vespapp.dialog.LoadingDialog;
 import com.habitissimo.vespapp.dialog.LoadingDialog.Listener;
+import com.habitissimo.vespapp.fotos.interactor.AddPhotosToSighting;
 import com.habitissimo.vespapp.questions.Sighting;
 
 import butterknife.ButterKnife;
@@ -26,6 +29,7 @@ import retrofit2.Response;
 public class ConfirmCaptureActivity extends AppCompatActivity {
 
     public static final String TAG = "ConfirmCaptureActivity";
+    private AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,16 +71,19 @@ public class ConfirmCaptureActivity extends AppCompatActivity {
     }
 
     private void onTypeOfSightPressed(int type) {
-//        showLoading();
+        showLoading();
         Sighting sighting = new Sighting();
         sighting.type = type;
         sighting.lat = 1;
         sighting.lng = 2;
-        sighting.free_text = "Vacío";//Es requerido
         Call<Sighting> call = Vespapp.get(this).getApi().createSighting(sighting);
         call.enqueue(new Callback<Sighting>() {
             @Override public void onResponse(Call<Sighting> call, Response<Sighting> response) {
-                onSightingCreated();
+                if (response.body() == null) {
+                    throw new RuntimeException("Sighting creation call returned null body");
+                }
+
+                onSightingCreated(response.body());
             }
 
             @Override public void onFailure(Call<Sighting> call, Throwable t) {
@@ -86,20 +93,45 @@ public class ConfirmCaptureActivity extends AppCompatActivity {
     }
 
     private void showLoading() {
-        LoadingDialog.show(this, new Listener() {
+        dialog = LoadingDialog.show(this, new Listener() {
             @Override public void onDialogDismissed() {
                 //Put something
             }
         });
     }
 
-    private void onSightingCreated() {
+    private void onSightingCreated(final Sighting sighting) {
+        ListaFotos listaFotos = getListaFotos();
+        new AddPhotosToSighting(this).execute(new AddPhotosToSighting.Arguments(sighting, listaFotos), new Callback<Void>() {
+            @Override public void onResponse(Call<Void> call, Response<Void> response) {
+                onPhotosUploaded(sighting);
+            }
+
+            @Override public void onFailure(Call<Void> call, Throwable t) {
+                onPhotosUploadingError(t);
+            }
+        });
+    }
+
+    private void onPhotosUploaded(Sighting sighting) {
+        Log.i(TAG, "Photos of sighting " + sighting.id + " uploaded");
+        Toast.makeText(this, "Fotos subidas", Toast.LENGTH_LONG).show();
+        hideDialog();
         //TODO:
-//        ListaFotos listaFotos = getListaFotos();
-//        for (String photoPath : listaFotos.getLista())
-//        {
-//        Vespapp.get(this).getApi().addPhoto(VespappApiHelper.buildPhotoApiParameter(new File(photoPath)));
-//        }
+//        CuestionarioActivity.launchActivity();
+    }
+
+    private void onPhotosUploadingError(Throwable t) {
+        hideDialog();
+        Log.e(TAG, "Error uploading photos: " + t);
+        Toast.makeText(this, "Error subiendo fotos", Toast.LENGTH_LONG).show();
+    }
+
+    private void hideDialog() {
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+            dialog = null;
+        }
     }
 
     private void onSightingCreationError(Throwable t) {

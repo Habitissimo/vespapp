@@ -53,12 +53,19 @@ public class MyCapturesController extends Controller<MyCapturesView, Void> {
         }
 
         public SightingUi map(Sighting apiModel) {
-            Picture firstPicture = apiModel.pictures.size() > 0 ? apiModel.pictures.get(0) : new Picture("", apiModel);
+            if (apiModel.pictures == null)
+                apiModel.pictures = new ArrayList<>();
+
+            Picture firstPicture = apiModel.pictures.size() > 0 ? apiModel.pictures.get(0) : new Picture("", "", "");
             return new SightingUi(firstPicture.file, apiModel.status);
         }
 
         public List<SightingUi> map(List<Sighting> sightings) {
             List<SightingUi> list = new ArrayList<>();
+
+            if (sightings == null) {
+                return list;
+            }
 
             for (Sighting sighting : sightings) {
                 list.add(map(sighting));
