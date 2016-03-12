@@ -14,7 +14,7 @@ import android.widget.Button;
 import android.widget.TabHost;
 
 import com.habitissimo.vespapp.database.Database;
-import com.habitissimo.vespapp.fotos.ConfirmCapActivity;
+import com.habitissimo.vespapp.fotos.ConfirmCaptureActivity;
 import com.habitissimo.vespapp.fotos.ListaFotos;
 
 import java.io.File;
@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
             resize(photoFile, 640, 480);
             savePictureToDatabase(picturePath);
 
-            Intent i = new Intent(this, ConfirmCapActivity.class);
+            Intent i = new Intent(this, ConfirmCaptureActivity.class);
             startActivity(i);
         }
     }

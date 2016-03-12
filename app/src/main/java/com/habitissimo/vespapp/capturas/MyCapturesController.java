@@ -17,7 +17,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MyCapturesController extends Controller<MyCapturesView, Void> {
-
     public static final String TAG = "MyCapturesController";
     private VespappApi api;
     private SightingsMapper mapper;
@@ -28,7 +27,8 @@ public class MyCapturesController extends Controller<MyCapturesView, Void> {
     }
 
     @Override public void onLoad(Void aVoid) {
-        api.getSightings(new Callback<List<Sighting>>() {
+        Call<List<Sighting>> call = api.getSightings();
+        call.enqueue(new Callback<List<Sighting>>() {
             @Override public void onResponse(Call<List<Sighting>> call, Response<List<Sighting>> response) {
                 onGotSightings(response);
             }
@@ -53,7 +53,7 @@ public class MyCapturesController extends Controller<MyCapturesView, Void> {
         }
 
         public SightingUi map(Sighting apiModel) {
-            Picture firstPicture = apiModel.pictures.get(0);
+            Picture firstPicture = apiModel.pictures.size() > 0 ? apiModel.pictures.get(0) : new Picture("", apiModel);
             return new SightingUi(firstPicture.file, apiModel.status);
         }
 

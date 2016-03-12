@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.List;
 
 import okhttp3.RequestBody;
+import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -19,24 +20,25 @@ import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 public interface VespappApi {
-    @GET("/sightings")
-    void getSightings(Callback<List<Sighting>> callback);
+    String SIGHTINGS = "sightings/";
 
-    @GET("/sightings" + "/{sightingId}")
+    @GET(SIGHTINGS) Call<List<Sighting>> getSightings();
+
+    @GET(SIGHTINGS + "{sightingId}/")
     void getSightingById(@Path("sightingId") String sightingId, Callback<Sighting> callback);
 
-    @PATCH("/sightings" + "/{sightingId}")
+    @PATCH(SIGHTINGS + "{sightingId}/")
     void updateSighting(@Path("sightingId") String sightingId, @Body Sighting sighting, Callback<Sighting> callback);
 
-    @POST("/sightings")
-    void createSighting(@Body Sighting sighting, Callback<Sighting> callback);
+    @POST(SIGHTINGS)
+    Call<Sighting> createSighting(@Body Sighting sighting);
 
     /**
      * @see VespappApiHelper#buildPhotoApiParameter(File)
      */
     @Multipart
-    @POST("/sightings/{sightingId}/photos")
-    void addPhoto(@Path("sightingId") String sightingId, @Part("file\"; filename=\"photo.png\" ") RequestBody photo);
+    @POST(SIGHTINGS + "{sightingId}/photos")
+    Call<Void> addPhoto(@Path("sightingId") String sightingId, @Part("file\"; filename=\"photo.png\" ") RequestBody photo);
 
     @GET("/sightings/{sightingId}/photos")
     void getPhotos(@Path("sightingId") String sightingId, Callback<List<Picture>> callback);

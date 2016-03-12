@@ -29,7 +29,7 @@
             android:name=".example.ExampleActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".fotos.ConfirmCapActivity"
+            android:name=".fotos.ConfirmCaptureActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".capturas.MyCapturesActivity"

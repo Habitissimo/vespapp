@@ -19,7 +19,7 @@ import retrofit2.Retrofit.Builder;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Vespapp extends Application {
-    private static final boolean FORCE_MOCK = true;
+    private static final boolean FORCE_MOCK = false;
 
     private Database database;
     private VespappApi api;

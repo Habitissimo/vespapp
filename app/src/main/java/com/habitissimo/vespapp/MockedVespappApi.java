@@ -16,8 +16,8 @@ import java.util.Random;
 import java.util.UUID;
 
 import okhttp3.RequestBody;
+import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
@@ -47,25 +47,34 @@ public class MockedVespappApi implements com.habitissimo.vespapp.api.VespappApi 
         return sighting;
     }
 
-    @Override public void getSightings(Callback<List<Sighting>> callback) {
-        callback.onResponse(null, Response.<List<Sighting>>success(new ArrayList<>(map.values())));
+    @Override public Call<List<Sighting>> getSightings() {
+        return null;
     }
 
     @Override public void getSightingById(@Path("sightingId") String sightingId, Callback<Sighting> callback) {
 
     }
 
+//    @Override public void getSightings(Callback<List<Sighting>> callback) {
+//        callback.onResponse(null, Response.<List<Sighting>>success(new ArrayList<>(map.values())));
+//    }
+
     @Override
     public void updateSighting(@Path("sightingId") String sightingId, @Body Sighting sighting, Callback<Sighting> callback) {
 
     }
 
-    @Override public void createSighting(@Body Sighting sighting, Callback<Sighting> callback) {
-
+    @Override public Call<Sighting> createSighting(@Body Sighting sighting) {
+        return null;
     }
 
-    @Override public void addPhoto(@Path("sightingId") String sightingId, @Part("file\"; filename=\"photo.png\" ") RequestBody photo) {
+//    @Override public void createSighting(@Body Sighting sighting, Callback<Sighting> callback) {
+//
+//    }
 
+    @Override
+    public Call<Void> addPhoto(@Path("sightingId") String sightingId, @Part("file\"; filename=\"photo.png\" ") RequestBody photo) {
+        return null;
     }
 
     @Override public void getPhotos(@Path("sightingId") String sightingId, Callback<List<Picture>> callback) {

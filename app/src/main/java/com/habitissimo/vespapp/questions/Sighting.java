@@ -28,7 +28,7 @@ public class Sighting {
     public List<String> answers = new ArrayList<>();
     @SerializedName("public")
     public boolean _public;
-    public List<Picture> pictures;
+    public List<Picture> pictures = new ArrayList<>();
 
     public String source = "app";
 

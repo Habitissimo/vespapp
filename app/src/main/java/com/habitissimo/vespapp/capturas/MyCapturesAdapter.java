@@ -2,6 +2,7 @@ package com.habitissimo.vespapp.capturas;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,9 @@ public class MyCapturesAdapter extends EasyRecyclerAdapter<SightingUi, MyCapture
         }
 
         public void setImageUrl(final String imageUrl) {
+            if (TextUtils.isEmpty(imageUrl))
+                return;
+
             Picasso.with(itemView.getContext()).load(imageUrl).into(photoImageView);
         }
 
