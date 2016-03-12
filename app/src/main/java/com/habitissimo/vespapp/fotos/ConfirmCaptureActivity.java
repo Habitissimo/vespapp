@@ -13,8 +13,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.habitissimo.vespapp.Constants;
 import com.habitissimo.vespapp.R;

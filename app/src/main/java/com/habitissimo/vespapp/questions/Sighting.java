@@ -29,6 +29,7 @@ public class Sighting {
     @SerializedName("public")
     public boolean _public;
     public List<Picture> pictures = null;
+    public String contact = "Anónimo";
 
     public String source = "app";
 
