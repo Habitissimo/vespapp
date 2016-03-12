@@ -8,30 +8,7 @@
         android:id="@+id/toolbar_confirm_cap"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark">
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ImageView
-                android:id="@+id/btn_toolbar_back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:src="@android:drawable/star_on" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/confirm_cap_titulo"
-                android:textColor="@color/colorTitulo"
-                android:textSize="@dimen/toolbar_title_size" />
-
-        </FrameLayout>
-
-    </android.support.v7.widget.Toolbar>
+        android:background="@color/colorPrimaryDark"></android.support.v7.widget.Toolbar>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycle_fotos"
