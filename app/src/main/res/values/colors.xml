@@ -12,4 +12,6 @@
     <color name="statusNotSent">#FF6716</color>
     <color name="statusValidated">#63CA75</color>
     <color name="statusPending">#B26F0D</color>
+    <color name="red">#9c0608</color>
+
 </resources>

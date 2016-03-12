@@ -60,6 +60,9 @@ public class MyCapturesController extends Controller<MyCapturesView, Void> {
         public List<SightingUi> map(List<Sighting> sightings) {
             List<SightingUi> list = new ArrayList<>();
 
+            if (sightings == null){
+                return list;
+            }
             for (Sighting sighting : sightings) {
                 list.add(map(sighting));
             }
